@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +8,8 @@ import { format, addWeeks, differenceInWeeks } from "date-fns";
 import { vi } from "date-fns/locale";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import MilestoneList from './MilestoneList';
+import useNotifications from '@/hooks/useNotifications';
 
 type CalculationType = "due-date" | "last-period";
 
@@ -21,20 +22,17 @@ const PregnancyCalculator = () => {
 
   const calculatePregnancyWeek = () => {
     if (calculationType === "due-date" && dueDate) {
-      // Calculate backward from due date (assuming 40 weeks total)
       const today = new Date();
       const weeksUntilDue = Math.max(0, Math.floor(differenceInWeeks(dueDate, today)));
       const currentWeek = 40 - weeksUntilDue;
       setPregnancyWeek(currentWeek);
       setCalculationComplete(true);
     } else if (calculationType === "last-period" && lastPeriod) {
-      // Calculate forward from last period
       const today = new Date();
       const weeksPregnant = Math.floor(differenceInWeeks(today, lastPeriod));
       setPregnancyWeek(weeksPregnant);
       setCalculationComplete(true);
       
-      // Also calculate and set the due date
       const calculatedDueDate = addWeeks(lastPeriod, 40);
       setDueDate(calculatedDueDate);
     } else {
@@ -47,6 +45,14 @@ const PregnancyCalculator = () => {
     setLastPeriod(undefined);
     setPregnancyWeek(null);
     setCalculationComplete(false);
+  };
+
+  const { subscribeToNotifications } = useNotifications();
+
+  const enableNotifications = async () => {
+    if (dueDate) {
+      await subscribeToNotifications(dueDate);
+    }
   };
 
   return (
@@ -171,6 +177,23 @@ const PregnancyCalculator = () => {
           <Button className="w-full btn-primary">
             Tạo lịch khám theo chuẩn y khoa
           </Button>
+
+          {calculationComplete && (
+            <div className="mt-8">
+              <h3 className="text-xl font-semibold mb-4">Lịch Trình Thai Kỳ</h3>
+              <MilestoneList currentWeek={pregnancyWeek as number} />
+            </div>
+          )}
+
+          {calculationComplete && (
+            <Button
+              className="w-full"
+              onClick={enableNotifications}
+            >
+              <Bell className="w-4 h-4 mr-2" />
+              Bật thông báo nhắc nhở
+            </Button>
+          )}
         </div>
       )}
     </div>

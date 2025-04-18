@@ -9,7 +9,66 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      notification_subscriptions: {
+        Row: {
+          browser_subscription: Json
+          created_at: string | null
+          due_date: string
+          id: string
+          last_notification_week: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          browser_subscription: Json
+          created_at?: string | null
+          due_date: string
+          id?: string
+          last_notification_week?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          browser_subscription?: Json
+          created_at?: string | null
+          due_date?: string
+          id?: string
+          last_notification_week?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      pregnancy_milestones: {
+        Row: {
+          created_at: string | null
+          description: string
+          id: string
+          importance: string | null
+          milestone_type: string
+          title: string
+          updated_at: string | null
+          week_number: number
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          id?: string
+          importance?: string | null
+          milestone_type: string
+          title: string
+          updated_at?: string | null
+          week_number: number
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          id?: string
+          importance?: string | null
+          milestone_type?: string
+          title?: string
+          updated_at?: string | null
+          week_number?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
