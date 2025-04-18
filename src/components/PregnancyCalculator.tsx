@@ -1,12 +1,14 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CalendarDays, CalendarClock } from "lucide-react";
+import { CalendarDays, CalendarClock, Bell } from "lucide-react";
 import { format, addWeeks, differenceInWeeks } from "date-fns";
 import { vi } from "date-fns/locale";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Label } from "@/components/ui/label";
 import MilestoneList from './MilestoneList';
 import useNotifications from '@/hooks/useNotifications';
 
