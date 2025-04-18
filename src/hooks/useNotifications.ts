@@ -2,6 +2,7 @@
 import { useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { Json } from '@/integrations/supabase/types';
 
 export const useNotifications = () => {
   const subscribeToNotifications = useCallback(async (dueDate: Date) => {
@@ -23,12 +24,10 @@ export const useNotifications = () => {
       // Store subscription in database
       const { error } = await supabase
         .from('notification_subscriptions')
-        .insert([
-          {
-            due_date: dueDate.toISOString(),
-            browser_subscription: subscription
-          }
-        ]);
+        .insert({
+          due_date: dueDate.toISOString(),
+          browser_subscription: subscription as unknown as Json
+        });
 
       if (error) throw error;
 

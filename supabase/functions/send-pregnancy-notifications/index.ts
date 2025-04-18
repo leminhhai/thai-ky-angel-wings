@@ -1,5 +1,6 @@
 
-import { serve } from "https://deno.fresh.dev/std@v1/http/server.ts";
+// Import from the correct Deno URL
+import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import webpush from "npm:web-push";
 
 const corsHeaders = {
