@@ -1,10 +1,8 @@
-
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Bell, CalendarDays, CalendarClock } from "lucide-react";
+import { CalendarDays, CalendarClock } from "lucide-react";
 import { format, addWeeks, differenceInWeeks } from "date-fns";
 import { vi } from "date-fns/locale";
 import { Calendar } from "@/components/ui/calendar";
@@ -21,6 +19,8 @@ const PregnancyCalculator = () => {
   const [pregnancyWeek, setPregnancyWeek] = useState<number | null>(null);
   const [calculationComplete, setCalculationComplete] = useState(false);
 
+  const navigate = useNavigate();
+
   const calculatePregnancyWeek = () => {
     if (calculationType === "due-date" && dueDate) {
       const today = new Date();
@@ -28,16 +28,30 @@ const PregnancyCalculator = () => {
       const currentWeek = 40 - weeksUntilDue;
       setPregnancyWeek(currentWeek);
       setCalculationComplete(true);
+      
+      navigate('/pregnancy-details', {
+        state: {
+          currentWeek,
+          dueDate,
+          calculationType: 'due-date'
+        }
+      });
     } else if (calculationType === "last-period" && lastPeriod) {
       const today = new Date();
       const weeksPregnant = Math.floor(differenceInWeeks(today, lastPeriod));
       setPregnancyWeek(weeksPregnant);
-      setCalculationComplete(true);
-      
       const calculatedDueDate = addWeeks(lastPeriod, 40);
       setDueDate(calculatedDueDate);
-    } else {
-      setCalculationComplete(false);
+      setCalculationComplete(true);
+      
+      navigate('/pregnancy-details', {
+        state: {
+          currentWeek: weeksPregnant,
+          dueDate: calculatedDueDate,
+          lastPeriod,
+          calculationType: 'last-period'
+        }
+      });
     }
   };
 
