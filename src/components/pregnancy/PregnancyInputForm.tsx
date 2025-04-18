@@ -30,9 +30,9 @@ export function PregnancyInputForm({
   onCalculate
 }: PregnancyInputFormProps) {
   return (
-    <div>
-      <Tabs value={calculationType} onValueChange={(v) => setCalculationType(v as CalculationType)}>
-        <TabsList className="grid grid-cols-2 mb-4">
+    <div className="space-y-6">
+      <Tabs value={calculationType} onValueChange={(v) => setCalculationType(v as CalculationType)} className="w-full">
+        <TabsList className="grid grid-cols-2 w-full">
           <TabsTrigger value="due-date">Ngày dự sinh</TabsTrigger>
           <TabsTrigger value="last-period">Ngày kinh cuối</TabsTrigger>
         </TabsList>
@@ -44,9 +44,9 @@ export function PregnancyInputForm({
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full justify-start text-left font-normal"
+                  className="w-full justify-start text-left font-normal border-clinic-primary/20"
                 >
-                  <CalendarDays className="mr-2 h-4 w-4" />
+                  <CalendarDays className="mr-2 h-4 w-4 text-clinic-primary" />
                   {dueDate ? (
                     format(dueDate, "dd/MM/yyyy", { locale: vi })
                   ) : (
@@ -54,11 +54,12 @@ export function PregnancyInputForm({
                   )}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
+              <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
                   selected={dueDate}
                   onSelect={setDueDate}
+                  className="rounded-md border"
                 />
               </PopoverContent>
             </Popover>
@@ -72,9 +73,9 @@ export function PregnancyInputForm({
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full justify-start text-left font-normal"
+                  className="w-full justify-start text-left font-normal border-clinic-primary/20"
                 >
-                  <CalendarClock className="mr-2 h-4 w-4" />
+                  <CalendarClock className="mr-2 h-4 w-4 text-clinic-primary" />
                   {lastPeriod ? (
                     format(lastPeriod, "dd/MM/yyyy", { locale: vi })
                   ) : (
@@ -82,11 +83,12 @@ export function PregnancyInputForm({
                   )}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
+              <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
                   selected={lastPeriod}
                   onSelect={setLastPeriod}
+                  className="rounded-md border"
                 />
               </PopoverContent>
             </Popover>
@@ -95,7 +97,7 @@ export function PregnancyInputForm({
       </Tabs>
       
       <Button 
-        className="w-full mt-4 btn-primary"
+        className="w-full bg-clinic-primary hover:bg-clinic-primary-dark text-white"
         onClick={onCalculate}
         disabled={
           (calculationType === "due-date" && !dueDate) || 
