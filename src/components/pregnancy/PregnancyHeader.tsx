@@ -1,12 +1,14 @@
 
-import { ArrowLeft, Bell } from "lucide-react";
+import { ArrowLeft, Bell, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import useNotifications from "@/hooks/useNotifications";
+import useCalendarDownload from "@/hooks/useCalendarDownload";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { toast } from "sonner";
+import { useState } from "react";
 
 interface PregnancyHeaderProps {
   currentWeek: number;
@@ -16,7 +18,9 @@ interface PregnancyHeaderProps {
 const PregnancyHeader = ({ currentWeek, dueDate }: PregnancyHeaderProps) => {
   const navigate = useNavigate();
   const { subscribeToNotifications } = useNotifications();
+  const { downloadCalendar, isDownloading } = useCalendarDownload();
   const isMobile = useIsMobile();
+  const [showCalendarOptions, setShowCalendarOptions] = useState(false);
 
   const handleNotificationSubscription = async () => {
     try {
@@ -31,6 +35,10 @@ const PregnancyHeader = ({ currentWeek, dueDate }: PregnancyHeaderProps) => {
         description: "Vui lòng kiểm tra lại quyền thông báo trên trình duyệt."
       });
     }
+  };
+
+  const handleCalendarDownload = () => {
+    downloadCalendar(new Date(dueDate), currentWeek);
   };
 
   return (
@@ -52,15 +60,27 @@ const PregnancyHeader = ({ currentWeek, dueDate }: PregnancyHeaderProps) => {
               Ngày dự sinh: {format(new Date(dueDate), 'dd/MM/yyyy', { locale: vi })}
             </p>
           </div>
-          <Button 
-            variant="outline"
-            onClick={handleNotificationSubscription}
-            className="shrink-0 gap-1 sm:gap-2 border-[#fd7e14]/20 bg-white text-[#fd7e14] hover:bg-[#fd7e14]/10 hover:text-[#fd7e14] px-2 sm:px-4"
-            size={isMobile ? "sm" : "default"}
-          >
-            <Bell className="h-4 w-4" />
-            <span className={isMobile ? "text-xs" : "text-sm"}>Nhận thông báo</span>
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline"
+              onClick={handleCalendarDownload}
+              disabled={isDownloading}
+              className="shrink-0 gap-1 sm:gap-2 border-[#fd7e14]/20 bg-white text-[#fd7e14] hover:bg-[#fd7e14]/10 hover:text-[#fd7e14] px-2 sm:px-4"
+              size={isMobile ? "sm" : "default"}
+            >
+              <Calendar className="h-4 w-4" />
+              {!isMobile && <span className="text-sm">Tải lịch</span>}
+            </Button>
+            <Button 
+              variant="outline"
+              onClick={handleNotificationSubscription}
+              className="shrink-0 gap-1 sm:gap-2 border-[#fd7e14]/20 bg-white text-[#fd7e14] hover:bg-[#fd7e14]/10 hover:text-[#fd7e14] px-2 sm:px-4"
+              size={isMobile ? "sm" : "default"}
+            >
+              <Bell className="h-4 w-4" />
+              {!isMobile && <span className="text-sm">Nhận thông báo</span>}
+            </Button>
+          </div>
         </div>
       </div>
     </header>

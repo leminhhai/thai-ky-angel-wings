@@ -15,10 +15,13 @@ export const useNotifications = () => {
 
       // Register service worker
       const registration = await navigator.serviceWorker.register('/sw.js');
+      
+      // VAPID public key (actual key would be provided by your backend)
+      const vapidPublicKey = 'BGk2Rx3DEjXdRv9qEzYPrD5e-WyIgvJOOx0-M1Ar3V16gi8o1qrQwOJjgV4OZ1zhFoXgc9bQ7FOQbZnXfP63o-s';
+      
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        // You'll need to replace this with your VAPID public key
-        applicationServerKey: 'YOUR_VAPID_PUBLIC_KEY'
+        applicationServerKey: vapidPublicKey
       });
 
       // Store subscription in database
@@ -31,11 +34,9 @@ export const useNotifications = () => {
 
       if (error) throw error;
 
-      toast.success('Đã bật thông báo thành công!');
       return true;
     } catch (error) {
       console.error('Error subscribing to notifications:', error);
-      toast.error('Không thể bật thông báo. Vui lòng thử lại sau.');
       return false;
     }
   }, []);
