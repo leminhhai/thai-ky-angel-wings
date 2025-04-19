@@ -17,16 +17,16 @@ const PregnancyInfo = ({ currentWeek }: PregnancyInfoProps) => {
             { label: "Lịch khám tiếp", value: currentWeek < 28 ? "4 tuần" : currentWeek < 36 ? "2 tuần" : "1 tuần" },
             { label: "Còn lại", value: Math.max(0, 40 - currentWeek) + " tuần" },
           ].map((item, index) => (
-            <div key={index} className="rounded-lg bg-white/80 backdrop-blur-sm p-3 shadow-sm">
-              <p className="text-sm text-clinic-primary font-medium">{item.label}</p>
-              <p className="font-bold text-clinic-primary-dark">{item.value}</p>
+            <div key={index} className="rounded-lg bg-white/90 backdrop-blur-sm p-3 shadow-sm">
+              <p className="text-sm text-[#6c757d] font-semibold">{item.label}</p>
+              <p className="font-bold text-[#fd7e14]">{item.value}</p>
             </div>
           ))}
         </div>
       </Card>
 
       <div>
-        <h2 className="text-xl font-bold mb-4 text-clinic-primary">Lịch trình thai kỳ</h2>
+        <h2 className="text-xl font-bold mb-4 text-[#fd7e14]">Lịch trình thai kỳ</h2>
         <MilestoneList currentWeek={currentWeek} />
       </div>
     </div>
