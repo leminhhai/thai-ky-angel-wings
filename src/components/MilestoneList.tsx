@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CalendarClock, CheckCircle } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type Milestone = {
   id: string;
@@ -15,6 +16,8 @@ type Milestone = {
 };
 
 const MilestoneList = ({ currentWeek }: { currentWeek: number }) => {
+  const isMobile = useIsMobile();
+  
   const { data: milestones } = useQuery({
     queryKey: ['milestones', currentWeek],
     queryFn: async () => {
@@ -33,7 +36,7 @@ const MilestoneList = ({ currentWeek }: { currentWeek: number }) => {
   if (!milestones) return null;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {milestones.map((milestone) => {
         const isPast = milestone.week_number < currentWeek;
         const isCurrent = milestone.week_number === currentWeek;
@@ -42,23 +45,23 @@ const MilestoneList = ({ currentWeek }: { currentWeek: number }) => {
         return (
           <Card 
             key={milestone.id}
-            className={`p-4 ${
+            className={`p-3 sm:p-4 ${
               isCurrent ? 'border-[#fd7e14] border-2' : 
-              isPast ? 'opacity-75' : ''
+              isPast ? 'opacity-80' : ''
             }`}
           >
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-3">
               <div className={`p-2 rounded-full ${
                 milestone.milestone_type === 'CHECKUP' ? 'bg-[#ffc107]/20' : 'bg-[#6c757d]/20'
               }`}>
                 {milestone.milestone_type === 'CHECKUP' ? 
-                  <CalendarClock className={`w-6 h-6 ${isPast ? 'text-[#6c757d]' : 'text-[#ffc107]'}`} /> : 
-                  <CheckCircle className={`w-6 h-6 ${isPast ? 'text-[#6c757d]' : 'text-[#fd7e14]'}`} />
+                  <CalendarClock className={`w-5 h-5 sm:w-6 sm:h-6 ${isPast ? 'text-[#6c757d]' : 'text-[#ffc107]'}`} /> : 
+                  <CheckCircle className={`w-5 h-5 sm:w-6 sm:h-6 ${isPast ? 'text-[#6c757d]' : 'text-[#fd7e14]'}`} />
                 }
               </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className={`font-medium ${
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-wrap items-center gap-2 mb-1">
+                  <h3 className={`font-bold ${
                     isCurrent ? 'text-[#fd7e14]' : 
                     isPast ? 'text-[#6c757d]' : 
                     'text-[#ffc107]'
@@ -67,13 +70,13 @@ const MilestoneList = ({ currentWeek }: { currentWeek: number }) => {
                   </h3>
                   <Badge 
                     variant={milestone.importance === 'high' ? 'destructive' : 'secondary'}
-                    className={milestone.importance === 'high' ? 'bg-[#fd7e14] text-white' : ''}
+                    className={`text-xs ${milestone.importance === 'high' ? 'bg-[#fd7e14] text-white font-bold' : ''}`}
                   >
                     {milestone.importance === 'high' ? 'Quan trọng' : 'Thông tin'}
                   </Badge>
                 </div>
-                <h4 className="font-semibold mb-2 text-[#6c757d]">{milestone.title}</h4>
-                <p className="text-sm text-[#6c757d]">{milestone.description}</p>
+                <h4 className="font-bold mb-1 sm:mb-2 text-[#6c757d]">{milestone.title}</h4>
+                <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-[#6c757d]`}>{milestone.description}</p>
               </div>
             </div>
           </Card>

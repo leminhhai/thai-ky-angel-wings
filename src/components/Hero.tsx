@@ -1,20 +1,22 @@
-
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { CalendarDays, Bell, ArrowRight } from "lucide-react";
 import PregnancyCalculator from "./PregnancyCalculator";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Hero = () => {
+  const isMobile = useIsMobile();
+  
   return (
     <section className="min-h-screen pt-20 pb-10 px-4 flex flex-col justify-center items-center">
-      <div className="container mx-auto grid md:grid-cols-2 gap-10 items-center">
+      <div className="container mx-auto grid md:grid-cols-2 gap-6 md:gap-10 items-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="flex flex-col gap-6"
+          className="flex flex-col gap-4 sm:gap-6 order-2 md:order-1"
         >
-          <h1 className="text-4xl md:text-5xl font-bold">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
             Đồng hành cùng{" "}
             <span className="bg-gradient-to-r from-baby-pink to-soft-peach text-transparent bg-clip-text">
               mẹ bầu
@@ -22,34 +24,34 @@ const Hero = () => {
             trên từng chặng đường
           </h1>
           
-          <p className="text-lg text-muted-foreground">
+          <p className="text-base sm:text-lg text-muted-foreground">
             Nhắc lịch khám thai, cung cấp thông tin bổ ích và đồng hành cùng
             bạn trong suốt thai kỳ tại phòng khám An Sinh.
           </p>
           
-          <div className="flex flex-wrap gap-4 mt-2">
-            <Button className="btn-primary gap-2">
-              <CalendarDays className="h-5 w-5" />
+          <div className="flex flex-wrap gap-3 sm:gap-4 mt-1 sm:mt-2">
+            <Button className="btn-primary gap-2 text-sm sm:text-base">
+              <CalendarDays className="h-4 w-4 sm:h-5 sm:w-5" />
               Tạo lịch khám thai
             </Button>
-            <Button variant="outline" className="gap-2 rounded-full">
-              <Bell className="h-5 w-5" />
+            <Button variant="outline" className="gap-2 rounded-full text-sm sm:text-base">
+              <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
               Nhận thông báo
             </Button>
           </div>
           
-          <div className="flex items-center gap-4 mt-4">
-            <div className="flex -space-x-4">
+          <div className="flex items-center gap-3 sm:gap-4 mt-2 sm:mt-4">
+            <div className="flex -space-x-3 sm:-space-x-4">
               {[1, 2, 3].map((item) => (
                 <div
                   key={item}
-                  className="w-10 h-10 rounded-full bg-gradient-to-br from-baby-pink to-soft-peach flex items-center justify-center text-white font-medium border-2 border-white"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-baby-pink to-soft-peach flex items-center justify-center text-white font-medium border-2 border-white"
                 >
                   {item}
                 </div>
               ))}
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground">
               Hơn <span className="font-bold">2,000+</span> mẹ bầu đã đăng ký
             </p>
           </div>
@@ -59,13 +61,13 @@ const Hero = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="pregnancy-card"
+          className="pregnancy-card order-1 md:order-2"
         >
           <PregnancyCalculator />
         </motion.div>
       </div>
       
-      <div className="w-full max-w-5xl mt-16">
+      <div className="w-full max-w-5xl mt-8 sm:mt-16">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold">Thông tin thai kỳ</h2>
           <Button variant="ghost" className="gap-1 text-sm">
