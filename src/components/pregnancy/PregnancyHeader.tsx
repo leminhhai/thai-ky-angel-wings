@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { vi } from "date-fns/locale";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { toast } from "sonner";
 
 interface PregnancyHeaderProps {
   currentWeek: number;
@@ -16,6 +17,21 @@ const PregnancyHeader = ({ currentWeek, dueDate }: PregnancyHeaderProps) => {
   const navigate = useNavigate();
   const { subscribeToNotifications } = useNotifications();
   const isMobile = useIsMobile();
+
+  const handleNotificationSubscription = async () => {
+    try {
+      const success = await subscribeToNotifications(new Date(dueDate));
+      if (success) {
+        toast.success("Đã bật thông báo thành công!", {
+          description: "Bạn sẽ nhận được các thông báo quan trọng về thai kỳ."
+        });
+      }
+    } catch (error) {
+      toast.error("Không thể bật thông báo", {
+        description: "Vui lòng kiểm tra lại quyền thông báo trên trình duyệt."
+      });
+    }
+  };
 
   return (
     <header className="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
@@ -38,7 +54,7 @@ const PregnancyHeader = ({ currentWeek, dueDate }: PregnancyHeaderProps) => {
           </div>
           <Button 
             variant="outline"
-            onClick={() => subscribeToNotifications(new Date(dueDate))}
+            onClick={handleNotificationSubscription}
             className="shrink-0 gap-1 sm:gap-2 border-[#fd7e14]/20 bg-white text-[#fd7e14] hover:bg-[#fd7e14]/10 hover:text-[#fd7e14] px-2 sm:px-4"
             size={isMobile ? "sm" : "default"}
           >

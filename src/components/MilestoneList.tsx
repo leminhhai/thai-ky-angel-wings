@@ -21,10 +21,11 @@ const MilestoneList = ({ currentWeek }: { currentWeek: number }) => {
   const { data: milestones } = useQuery({
     queryKey: ['milestones', currentWeek],
     queryFn: async () => {
-      // Fetch milestones up to the current week plus next 4 weeks
+      // Only fetch current week and upcoming weeks
       const { data, error } = await supabase
         .from('pregnancy_milestones')
         .select('*')
+        .gte('week_number', currentWeek)
         .lte('week_number', currentWeek + 4)
         .order('week_number', { ascending: true });
       
@@ -33,21 +34,22 @@ const MilestoneList = ({ currentWeek }: { currentWeek: number }) => {
     }
   });
 
-  if (!milestones) return null;
+  if (!milestones?.length) return (
+    <div className="text-center py-8 text-[#6c757d]">
+      <p>Không có thông tin cho giai đoạn này</p>
+    </div>
+  );
 
   return (
     <div className="space-y-3 sm:space-y-4">
       {milestones.map((milestone) => {
-        const isPast = milestone.week_number < currentWeek;
         const isCurrent = milestone.week_number === currentWeek;
-        const isUpcoming = milestone.week_number > currentWeek;
 
         return (
           <Card 
             key={milestone.id}
             className={`p-3 sm:p-4 ${
-              isCurrent ? 'border-[#fd7e14] border-2' : 
-              isPast ? 'opacity-80' : ''
+              isCurrent ? 'border-[#fd7e14] border-2' : ''
             }`}
           >
             <div className="flex items-start gap-3">
@@ -55,16 +57,14 @@ const MilestoneList = ({ currentWeek }: { currentWeek: number }) => {
                 milestone.milestone_type === 'CHECKUP' ? 'bg-[#ffc107]/20' : 'bg-[#6c757d]/20'
               }`}>
                 {milestone.milestone_type === 'CHECKUP' ? 
-                  <CalendarClock className={`w-5 h-5 sm:w-6 sm:h-6 ${isPast ? 'text-[#6c757d]' : 'text-[#ffc107]'}`} /> : 
-                  <CheckCircle className={`w-5 h-5 sm:w-6 sm:h-6 ${isPast ? 'text-[#6c757d]' : 'text-[#fd7e14]'}`} />
+                  <CalendarClock className="w-5 h-5 sm:w-6 sm:h-6 text-[#ffc107]" /> : 
+                  <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-[#fd7e14]" />
                 }
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-2 mb-1">
                   <h3 className={`font-bold ${
-                    isCurrent ? 'text-[#fd7e14]' : 
-                    isPast ? 'text-[#6c757d]' : 
-                    'text-[#ffc107]'
+                    isCurrent ? 'text-[#fd7e14]' : 'text-[#ffc107]'
                   }`}>
                     Tuần {milestone.week_number}
                   </h3>
