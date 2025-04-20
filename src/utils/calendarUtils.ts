@@ -108,15 +108,15 @@ export function generateCalendarURL(appointments: AppointmentInfo[], format: 'ic
     const firstAppt = appointments[0];
     if (!firstAppt) return '';
     
-    // Use literals to ensure we get primitive strings, not String objects
-    const startTime = format(firstAppt.startDate, "yyyyMMdd'T'HHmmss");
-    const endTime = format(
+    // Format dates as primitive strings
+    const startTimeStr = format(firstAppt.startDate, "yyyyMMdd'T'HHmmss");
+    const endTimeStr = format(
       addDays(firstAppt.startDate, 0),
       "yyyyMMdd'T'HHmmss"
     );
     
-    // Construct dateParam with primitive strings
-    const dateParam = startTime + '/' + endTime;
+    // Create date parameter with primitive string concatenation
+    const dateParam = `${startTimeStr}/${endTimeStr}`;
     
     const googleCalUrl = new URL('https://calendar.google.com/calendar/render');
     googleCalUrl.searchParams.append('action', 'TEMPLATE');
