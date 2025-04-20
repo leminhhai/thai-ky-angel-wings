@@ -109,6 +109,7 @@ export function generateCalendarURL(appointments: AppointmentInfo[], format: 'ic
     const firstAppt = appointments[0];
     if (!firstAppt) return '';
     
+    // Fix: Use primitive string values instead of String objects
     const startDate = format(firstAppt.startDate, "yyyyMMdd'T'HHmmss");
     const endDate = format(
       addDays(firstAppt.startDate, 0),
