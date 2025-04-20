@@ -109,9 +109,9 @@ export function generateCalendarURL(appointments: AppointmentInfo[], format: 'ic
     const firstAppt = appointments[0];
     if (!firstAppt) return '';
     
-    // Fix: Use primitive string values instead of String objects
-    const startDate = format(firstAppt.startDate, "yyyyMMdd'T'HHmmss");
-    const endDate = format(
+    // Fix: Ensure we're using primitive string values for date formatting
+    const startDateTime = format(firstAppt.startDate, "yyyyMMdd'T'HHmmss");
+    const endDateTime = format(
       addDays(firstAppt.startDate, 0),
       "yyyyMMdd'T'HHmmss"
     );
@@ -119,7 +119,7 @@ export function generateCalendarURL(appointments: AppointmentInfo[], format: 'ic
     const googleCalUrl = new URL('https://calendar.google.com/calendar/render');
     googleCalUrl.searchParams.append('action', 'TEMPLATE');
     googleCalUrl.searchParams.append('text', firstAppt.title);
-    googleCalUrl.searchParams.append('dates', `${startDate}/${endDate}`);
+    googleCalUrl.searchParams.append('dates', `${startDateTime}/${endDateTime}`);
     googleCalUrl.searchParams.append('details', firstAppt.description);
     if (firstAppt.location) {
       googleCalUrl.searchParams.append('location', firstAppt.location);
