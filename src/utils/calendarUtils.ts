@@ -1,4 +1,3 @@
-
 import { addDays, format, differenceInWeeks } from 'date-fns';
 
 type AppointmentInfo = {
@@ -109,9 +108,9 @@ export function generateCalendarURL(appointments: AppointmentInfo[], format: 'ic
     const firstAppt = appointments[0];
     if (!firstAppt) return '';
     
-    // Fix: Ensure we're using primitive string values for date formatting
-    const startDateTime = format(firstAppt.startDate, "yyyyMMdd'T'HHmmss");
-    const endDateTime = format(
+    // Fix: Create formatted date strings properly to avoid String object issues
+    const startDateStr = format(firstAppt.startDate, "yyyyMMdd'T'HHmmss");
+    const endDateStr = format(
       addDays(firstAppt.startDate, 0),
       "yyyyMMdd'T'HHmmss"
     );
@@ -119,7 +118,7 @@ export function generateCalendarURL(appointments: AppointmentInfo[], format: 'ic
     const googleCalUrl = new URL('https://calendar.google.com/calendar/render');
     googleCalUrl.searchParams.append('action', 'TEMPLATE');
     googleCalUrl.searchParams.append('text', firstAppt.title);
-    googleCalUrl.searchParams.append('dates', `${startDateTime}/${endDateTime}`);
+    googleCalUrl.searchParams.append('dates', `${startDateStr}/${endDateStr}`);
     googleCalUrl.searchParams.append('details', firstAppt.description);
     if (firstAppt.location) {
       googleCalUrl.searchParams.append('location', firstAppt.location);
