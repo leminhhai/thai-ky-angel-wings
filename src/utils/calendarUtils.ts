@@ -1,4 +1,3 @@
-
 import { addDays, format, differenceInWeeks } from 'date-fns';
 
 type AppointmentInfo = {
@@ -105,19 +104,18 @@ export function generateCalendarURL(appointments: AppointmentInfo[], format: 'ic
     return URL.createObjectURL(blob);
   } else if (format === 'google') {
     // Return the URL of the first appointment for Google Calendar
-    // (We'll assume the user will add subsequent events from there)
     const firstAppt = appointments[0];
     if (!firstAppt) return '';
     
-    // Convert dates to strings using primitive string concatenation to avoid String object issues
+    // Use primitive string concatenation to create date strings
     const startTime = format(firstAppt.startDate, "yyyyMMdd'T'HHmmss");
     const endTime = format(
       addDays(firstAppt.startDate, 0),
       "yyyyMMdd'T'HHmmss"
     );
     
-    // Use string primitive values directly without any method calls on them
-    const dateParam = startTime + "/" + endTime;
+    // Create date parameter as a primitive string
+    const dateParam = `${startTime}/${endTime}`;
     
     const googleCalUrl = new URL('https://calendar.google.com/calendar/render');
     googleCalUrl.searchParams.append('action', 'TEMPLATE');
